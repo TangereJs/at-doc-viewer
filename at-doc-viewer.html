@@ -8,8 +8,6 @@
       margin: 0 10%;
     }
 
-    .doc-container > .header {}
-
     .header > label {
       font-weight: 500;
       font-size: 21px;
@@ -20,37 +18,44 @@
       font-size: 13px;
     }
 
-    .doc-container > .items-container {
+    .doc-container > .section {
       margin-top: 13px;
       margin-left: 21px;
       border: 1px solid gray;
       border-bottom: none;
     }
 
-    .items-container > label {
+    .section > .title {
       margin-left: 5px;
       font-weight: 500;
       font-size: 17px;
     }
 
-    .item-container > .item:first-child {
+    .items-container > .item-container:first-child {
       border-top: 1px solid gray;
-    }
-
-    .item-container > .item {
       border-bottom: 1px solid gray;
     }
 
-    .item > label {
-      margin-left: 5px;
-      font-weight: 500;
-      font-size: 14px;
-      border-right: 1px solid gray;
+    .items-container > .item-container {
+      border-bottom: 1px solid gray;
     }
 
-    .item > p {
-      margin-left: 8px;
-      font-size: 13px;
+    .signature .name {
+      font-weight: bold;
+      margin-left: 13px;
+    }
+
+    .item-container > .details {
+      padding-left: 144px;
+    }
+
+    .details p {
+      /*remove semantic.css effect*/
+      margin: 0;
+    }
+
+    .details > .params-return-wrapper {
+      background: rgba(0, 0, 0, 0.05)
     }
   </style>
   <template>
@@ -61,52 +66,92 @@
         <p>{{data.description}}</p>
       </div>
       <template is="dom-if" if="{{data.properties}}">
-        <div class="vertical layout items-container">
-          <label>Properties</label>
-          <div class="vertical layout item-container">
+        <div class="vertical layout section">
+          <label class="title">Properties</label>
+          <div class="vertical layout items-container">
             <template is="dom-repeat" items="{{data.properties}}">
-              <div class="horizontal layout item">
-                <label class="flex-2">{{item.name}}</label>
-                <p class="flex-10">{{item.description}}</p>
+              <div class="item-container">
+                <div class="horizontal layout signature">
+                  <span class="name">{{item.name}}</span>
+                </div>
+                <div class="vertical layout details">
+                  <div class="params-return-wrapper">
+                    <p>Type: {
+                      <span class="param-type">{{item.type}}</span>}
+                    </p>
+                    <p>Default:
+                      <span>{{item.default}}</span>
+                    </p>
+                  </div>
+                  <p class="item-description">{{item.description}}</p>
+                </div>
               </div>
             </template>
           </div>
         </div>
       </template>
       <template is="dom-if" if="{{data.methods}}">
-        <div class="vertical layout items-container">
-          <label>Methods</label>
-          <div class="vertical layout item-container">
+        <div class="vertical layout section">
+          <label class="title">Methods</label>
+          <div class="vertical layout items-container">
             <template is="dom-repeat" items="{{data.methods}}">
-              <div class="horizontal layout item">
-                <label class="flex-2">{{item.name}}</label>
-                <p class="flex-10">{{item.description}}</p>
+              <div class="item-container">
+                <div class="horizontal layout signature">
+                  <p>
+                    <span class="name">{{item.name}}</span>
+                    <span>(</span>
+                    <template is="dom-if" if="{{item.params}}">
+                      <span class="param-list">[[_computeParamList(item.params)]]</span>
+                    </template>
+                    <span>)</span>
+                    <template is="dom-if" if="{{item.return}}">
+                      <span>➙ {</span>
+                      <span class="return-type">{{item.return.type}}</span>
+                      <span>}</span>
+                    </template>
+                  </p>
+                </div>
+                <div class="vertical layout details">
+                  <div class="params-return-wrapper">
+                    <template is="dom-repeat" items="{{item.params}}" as="param">
+                      <p>
+                        <span class="param-name">{{param.name}}</span>
+                        <span>{</span>
+                        <span class="param-type">{{param.type}}</span>
+                        <span>}</span>
+                        <span class="param-description">{{param.description}}</span>
+                      </p>
+                    </template>
+                    <template is="dom-if" if="{{item.return}}">
+                      <p>
+                        <span>Returns {</span>
+                        <span class="return-type">{{item.return.type}}</span>
+                        <span>}</span>
+                        <span class="return-description">{{item.return.description}}</span>
+                      </p>
+                    </template>
+                  </div>
+                  <p class="item-description">{{item.description}}</p>
+                </div>
               </div>
             </template>
           </div>
         </div>
       </template>
       <template is="dom-if" if="{{data.events}}">
-        <div class="vertical layout items-container">
-          <label>Methods</label>
-          <div class="vertical layout item-container">
+        <div class="vertical layout section">
+          <label class="title">Events</label>
+          <div class="vertical layout items-container">
             <template is="dom-repeat" items="{{data.events}}">
-              <div class="horizontal layout item">
-                <label class="flex-2">{{item.name}}</label>
-                <p class="flex-10">{{item.description}}</p>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-      <template is="dom-if" if="{{data.attributes}}">
-        <div class="vertical layout items-container">
-          <label>Methods</label>
-          <div class="vertical layout item-container">
-            <template is="dom-repeat" items="{{data.attributes}}">
-              <div class="horizontal layout item">
-                <label class="flex-2">{{item.name}}</label>
-                <p class="flex-10">{{item.description}}</p>
+              <div class="vertical layout item-container">
+                <div class="horizontal layout item">
+                  <div class="flex-2 signature">
+                    <label class="name">{{item.name}}</label>
+                  </div>
+                  <div class="flex-10 details">
+                    <p class="description">{{item.description}}</p>
+                  </div>
+                </div>
               </div>
             </template>
           </div>
@@ -130,8 +175,18 @@
         var self = this;
         docParser.addEventListener('value-changed', function(event) {
           var value = docParser.value;
-          self.data = value.classes[0];
+          var data = value.classes[0];
+          self.data = data;
         });
+      },
+      _computeParamList: function(params) {
+        var
+          result = [];
+        params.forEach(function(param, index) {
+          result.push(param.name);
+        });
+        result = result.join(", ");
+        return result;
       }
     });
   </script>

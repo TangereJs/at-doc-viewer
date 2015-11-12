@@ -1,0 +1,138 @@
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../at-core-theme/at-core-theme.html">
+<link rel="import" href="../at-doc-parser/at-doc-parser.html">
+
+<dom-module id="at-doc-viewer">
+  <style>
+    .doc-container {
+      margin: 0 10%;
+    }
+
+    .doc-container > .header {}
+
+    .header > label {
+      font-weight: 500;
+      font-size: 21px;
+    }
+
+    .header > p {
+      margin-left: 8px;
+      font-size: 13px;
+    }
+
+    .doc-container > .items-container {
+      margin-top: 13px;
+      margin-left: 21px;
+      border: 1px solid gray;
+      border-bottom: none;
+    }
+
+    .items-container > label {
+      margin-left: 5px;
+      font-weight: 500;
+      font-size: 17px;
+    }
+
+    .item-container > .item:first-child {
+      border-top: 1px solid gray;
+    }
+
+    .item-container > .item {
+      border-bottom: 1px solid gray;
+    }
+
+    .item > label {
+      margin-left: 5px;
+      font-weight: 500;
+      font-size: 14px;
+      border-right: 1px solid gray;
+    }
+
+    .item > p {
+      margin-left: 8px;
+      font-size: 13px;
+    }
+  </style>
+  <template>
+    <at-doc-parser id="docParser" url="{{url}}"></at-doc-parser>
+    <div class="vertical layout doc-container">
+      <div class="header">
+        <label>{{data.name}}</label>
+        <p>{{data.description}}</p>
+      </div>
+      <template is="dom-if" if="{{data.properties}}">
+        <div class="vertical layout items-container">
+          <label>Properties</label>
+          <div class="vertical layout item-container">
+            <template is="dom-repeat" items="{{data.properties}}">
+              <div class="horizontal layout item">
+                <label class="flex-2">{{item.name}}</label>
+                <p class="flex-10">{{item.description}}</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{data.methods}}">
+        <div class="vertical layout items-container">
+          <label>Methods</label>
+          <div class="vertical layout item-container">
+            <template is="dom-repeat" items="{{data.methods}}">
+              <div class="horizontal layout item">
+                <label class="flex-2">{{item.name}}</label>
+                <p class="flex-10">{{item.description}}</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{data.events}}">
+        <div class="vertical layout items-container">
+          <label>Methods</label>
+          <div class="vertical layout item-container">
+            <template is="dom-repeat" items="{{data.events}}">
+              <div class="horizontal layout item">
+                <label class="flex-2">{{item.name}}</label>
+                <p class="flex-10">{{item.description}}</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+      <template is="dom-if" if="{{data.attributes}}">
+        <div class="vertical layout items-container">
+          <label>Methods</label>
+          <div class="vertical layout item-container">
+            <template is="dom-repeat" items="{{data.attributes}}">
+              <div class="horizontal layout item">
+                <label class="flex-2">{{item.name}}</label>
+                <p class="flex-10">{{item.description}}</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+  <script>
+    'use strict';
+    Polymer({
+      is: 'at-doc-viewer',
+      properties: {
+        url: {
+          type: String,
+          value: ''
+        }
+      },
+      _scopeCssViaAttr: true,
+      ready: function() {
+        var docParser = this.$.docParser;
+        var self = this;
+        docParser.addEventListener('value-changed', function(event) {
+          var value = docParser.value;
+          self.data = value.classes[0];
+        });
+      }
+    });
+  </script>
+</dom-module>

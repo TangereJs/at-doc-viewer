@@ -65,7 +65,7 @@
         <label>{{data.name}}</label>
         <p>{{data.description}}</p>
       </div>
-      <template is="dom-if" if="{{data.properties}}">
+      <template is="dom-if" if="{{data.properties.length}}">
         <div class="vertical layout section">
           <label class="title">Properties</label>
           <div class="vertical layout items-container">
@@ -90,7 +90,7 @@
           </div>
         </div>
       </template>
-      <template is="dom-if" if="{{data.methods}}">
+      <template is="dom-if" if="{{data.methods.length}}">
         <div class="vertical layout section">
           <label class="title">Methods</label>
           <div class="vertical layout items-container">
@@ -138,7 +138,7 @@
           </div>
         </div>
       </template>
-      <template is="dom-if" if="{{data.events}}">
+      <template is="dom-if" if="{{data.events.length}}">
         <div class="vertical layout section">
           <label class="title">Events</label>
           <div class="vertical layout items-container">
@@ -174,9 +174,10 @@
         var docParser = this.$.docParser;
         var self = this;
         docParser.addEventListener('value-changed', function(event) {
-          var value = docParser.value;
-          var data = value.classes[0];
-          self.data = data;
+          if (docParser.value.length > 0){
+            var value = docParser.value[0];
+            self.data = value;
+          }
         });
       },
       _computeParamList: function(params) {

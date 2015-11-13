@@ -167,6 +167,10 @@
         url: {
           type: String,
           value: ''
+        },
+        auto: {
+          type: Boolean,
+          value: false
         }
       },
       _scopeCssViaAttr: true,
@@ -179,6 +183,18 @@
             self.data = value;
           }
         });
+        if (this.auto && this.url === ''){
+          // autogenerate the url
+          // debugger;
+          var url = window.location.href;
+          if (url.indexOf("index.html") !== -1) {
+            var urlParts = url.split("/");
+            if (urlParts.length > 2) {
+              var componentName = urlParts[urlParts.length-2];
+              self.url = componentName + '.html';              
+            }
+          }
+        }
       },
       _computeParamList: function(params) {
         var

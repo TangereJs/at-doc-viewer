@@ -98,7 +98,9 @@
                       <span>{{item.default}}</span>
                     </p>
                   </div>
-                  <marked-element class="item-description">{{item.description}}</marked-element>
+                  <marked-element class="item-description" text="{{item.description}}">
+                    <div class="markdown-html"></div>
+                  </marked-element>
                 </div>
               </div>
             </template>
@@ -134,7 +136,9 @@
                         <span>{</span>
                         <span class="param-type">{{param.type}}</span>
                         <span>}</span>
-                        <marked-element class="param-description">{{param.description}}</marked-element>
+                        <marked-element class="param-description" text="{{param.description}}">
+                          <div class="markdown-html"></div>
+                        </marked-element>
                       </p>
                     </template>
                     <template is="dom-if" if="{{item.return}}">
@@ -146,7 +150,9 @@
                       </p>
                     </template>
                   </div>
-                  <marked-element class="item-description">{{item.description}}</marked-element>
+                  <marked-element class="item-description" text="{{item.description}}">
+                    <div class="markdown-html"></div>
+                  </marked-element>
                 </div>
               </div>
             </template>
@@ -164,7 +170,9 @@
                     <label class="name">{{item.name}}</label>
                   </div>
                   <div class="flex-10 details">
-                    <p class="description">{{item.description}}</p>
+                    <marked-element class="item-description" text="{{item.description}}">
+                      <div class="markdown-html"></div>
+                    </marked-element>
                   </div>
                 </div>
               </div>

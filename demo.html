@@ -1,26 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>at-doc-viewer demo</title>
+    <meta charset="utf-8">    
     <script src="../webcomponentsjs/webcomponents-lite.js" charset="utf-8"></script>
-    <link rel="import" href="../polymer/polymer.html">
-    <link rel="import" href="../layout/layout.html">
-    <link rel="import" href="at-doc-viewer.html">
-    <style media="screen">
-      .content-title {
-        margin-left: 10%;
-      }
-    </style>
+    <link rel="import" href="../polymer/polymer.html">    
+    <link rel="import" href="../at-doc-viewer/at-doc-viewer.html">
   </head>
   <body>
-    <div class="vertical layout">
-      <div>
-        <h3 class="content-title">at-doc-viewer demo</h3>
-      </div>
-      <div>
-        <at-doc-viewer url="../at-form-input/at-form-input.html"></at-doc-viewer>
-      </div>
-    </div>
+    <at-doc-viewer url="../at-form-input/at-form-input.html"></at-doc-viewer>
   </body>
 </html>

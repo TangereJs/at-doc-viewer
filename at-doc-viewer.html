@@ -78,7 +78,9 @@
     <div class="vertical layout doc-container">
       <div class="header">
         <label>{{data.name}}</label>
-        <p>{{data.description}}</p>
+        <marked-element text="{{data.description}}">
+          <div class="markdown-html"></div>
+        </marked-element>
       </div>
       <template is="dom-if" if="{{data.properties.length}}">
         <div class="vertical layout section">

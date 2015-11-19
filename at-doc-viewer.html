@@ -2,6 +2,9 @@
 <link rel="import" href="../at-core-theme/at-core-theme.html">
 <link rel="import" href="../at-doc-parser/at-doc-parser.html">
 <link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="../at-carbon-tabs/at-carbon-tab.html">
+<link rel="import" href="../at-carbon-tabs/at-carbon-tabs.html">
+<link rel="import" href="../at-doc-demo/at-doc-demo.html">
 
 <dom-module id="at-doc-viewer">
   <style>
@@ -72,6 +75,14 @@
     .details > .params-return-wrapper {
       background: rgba(0, 0, 0, 0.05)
     }
+
+    .documentation.hidden {
+      display: none;
+    }
+
+    .playground.hidden {
+      display: none;
+    }
   </style>
   <template>
     <at-doc-parser id="docParser" url="{{url}}"></at-doc-parser>
@@ -82,106 +93,117 @@
           <div class="markdown-html"></div>
         </marked-element>
       </div>
-      <template is="dom-if" if="{{data.properties.length}}">
-        <div class="vertical layout section">
-          <label class="title">Properties</label>
-          <div class="vertical layout items-container">
-            <template is="dom-repeat" items="{{data.properties}}">
-              <div class="item-container" hidden$="[[item.private]]">
-                <div class="horizontal layout property signature">
-                  <span class="name">{{item.name}}</span>
-                </div>
-                <div class="vertical layout property details">
-                  <div class="params-return-wrapper">
-                    <p>Type:
-                      <span class="param-type">{{item.type}}</span>
-                    </p>
-                    <p>Default:
-                      <span>{{item.default}}</span>
-                    </p>
-                  </div>
-                  <marked-element class="item-description" text="{{item.description}}">
-                    <div class="markdown-html"></div>
-                  </marked-element>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-      <template is="dom-if" if="{{data.methods.length}}">
-        <div class="vertical layout section">
-          <label class="title">Methods</label>
-          <div class="vertical layout items-container">
-            <template is="dom-repeat" items="{{data.methods}}">
-              <div class="item-container" hidden$="[[item.private]]">
-                <div class="horizontal layout signature">
-                  <p>
+      <div>
+      <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
+        <at-carbon-tab data-name="documentation">Documentation</at-carbon-tab>
+        <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
+      </at-carbon-tabs>
+      </div>
+      <div id="documentation" class="documentation">
+        <template is="dom-if" if="{{data.properties.length}}">
+          <div class="vertical layout section">
+            <label class="title">Properties</label>
+            <div class="vertical layout items-container">
+              <template is="dom-repeat" items="{{data.properties}}">
+                <div class="item-container" hidden$="[[item.private]]">
+                  <div class="horizontal layout property signature">
                     <span class="name">{{item.name}}</span>
-                    <span>(</span>
-                    <template is="dom-if" if="{{item.params}}">
-                      <span class="param-list">[[_computeParamList(item.params)]]</span>
-                    </template>
-                    <span>)</span>
-                    <template is="dom-if" if="{{item.return}}">
-                      <span>➙ {</span>
-                      <span class="return-type">{{item.return.type}}</span>
-                      <span>}</span>
-                    </template>
-                  </p>
-                </div>
-                <div class="vertical layout details">
-                  <div class="params-return-wrapper">
-                    <template is="dom-repeat" items="{{item.params}}" as="param">
-                      <p>
-                        <span class="param-name">{{param.name}}</span>
-                        <span>{</span>
-                        <span class="param-type">{{param.type}}</span>
-                        <span>}</span>
-                        <marked-element class="param-description" text="{{param.description}}">
-                          <div class="markdown-html"></div>
-                        </marked-element>
-                      </p>
-                    </template>
-                    <template is="dom-if" if="{{item.return}}">
-                      <p>
-                        <span>Returns {</span>
-                        <span class="return-type">{{item.return.type}}</span>
-                        <span>}</span>
-                        <marked-element class="return-description">{{item.return.description}}</marked-element>
-                      </p>
-                    </template>
                   </div>
-                  <marked-element class="item-description" text="{{item.description}}">
-                    <div class="markdown-html"></div>
-                  </marked-element>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-      <template is="dom-if" if="{{data.events.length}}">
-        <div class="vertical layout section">
-          <label class="title">Events</label>
-          <div class="vertical layout items-container">
-            <template is="dom-repeat" items="{{data.events}}">
-              <div class="vertical layout item-container">
-                <div class="horizontal layout item">
-                  <div class="flex-2 signature">
-                    <label class="name">{{item.name}}</label>
-                  </div>
-                  <div class="flex-10 details">
+                  <div class="vertical layout property details">
+                    <div class="params-return-wrapper">
+                      <p>Type:
+                        <span class="param-type">{{item.type}}</span>
+                      </p>
+                      <p>Default:
+                        <span>{{item.default}}</span>
+                      </p>
+                    </div>
                     <marked-element class="item-description" text="{{item.description}}">
                       <div class="markdown-html"></div>
                     </marked-element>
                   </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
+        <template is="dom-if" if="{{data.methods.length}}">
+          <div class="vertical layout section">
+            <label class="title">Methods</label>
+            <div class="vertical layout items-container">
+              <template is="dom-repeat" items="{{data.methods}}">
+                <div class="item-container" hidden$="[[item.private]]">
+                  <div class="horizontal layout signature">
+                    <p>
+                      <span class="name">{{item.name}}</span>
+                      <span>(</span>
+                      <template is="dom-if" if="{{item.params}}">
+                        <span class="param-list">[[_computeParamList(item.params)]]</span>
+                      </template>
+                      <span>)</span>
+                      <template is="dom-if" if="{{item.return}}">
+                        <span>➙ {</span>
+                        <span class="return-type">{{item.return.type}}</span>
+                        <span>}</span>
+                      </template>
+                    </p>
+                  </div>
+                  <div class="vertical layout details">
+                    <div class="params-return-wrapper">
+                      <template is="dom-repeat" items="{{item.params}}" as="param">
+                        <p>
+                          <span class="param-name">{{param.name}}</span>
+                          <span>{</span>
+                          <span class="param-type">{{param.type}}</span>
+                          <span>}</span>
+                          <marked-element class="param-description" text="{{param.description}}">
+                            <div class="markdown-html"></div>
+                          </marked-element>
+                        </p>
+                      </template>
+                      <template is="dom-if" if="{{item.return}}">
+                        <p>
+                          <span>Returns {</span>
+                          <span class="return-type">{{item.return.type}}</span>
+                          <span>}</span>
+                          <marked-element class="return-description">{{item.return.description}}</marked-element>
+                        </p>
+                      </template>
+                    </div>
+                    <marked-element class="item-description" text="{{item.description}}">
+                      <div class="markdown-html"></div>
+                    </marked-element>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+        <template is="dom-if" if="{{data.events.length}}">
+          <div class="vertical layout section">
+            <label class="title">Events</label>
+            <div class="vertical layout items-container">
+              <template is="dom-repeat" items="{{data.events}}">
+                <div class="vertical layout item-container">
+                  <div class="horizontal layout item">
+                    <div class="flex-2 signature">
+                      <label class="name">{{item.name}}</label>
+                    </div>
+                    <div class="flex-10 details">
+                      <marked-element class="item-description" text="{{item.description}}">
+                        <div class="markdown-html"></div>
+                      </marked-element>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div id="playground" class="playground hidden">
+        <at-doc-demo url={{url}}></at-doc-demo>
+      </div>
     </div>
   </template>
   <script>
@@ -194,6 +216,10 @@
           value: ''
         },
         auto: {
+          type: Boolean,
+          value: false
+        },
+        showPlayground: {
           type: Boolean,
           value: false
         }
@@ -220,6 +246,19 @@
             }
           }
         }
+        var tabSelector = this.$.tabSelector;
+        var documentationDiv = this.$.documentation;
+        var playgroundDiv = this.$.playground;
+        tabSelector.addEventListener('tab-changed', function(event) {
+          var value = event.detail.value;
+          if (value.currentTab === 'documentation') {
+            self.toggleClass('hidden', true, playgroundDiv);
+            self.toggleClass('hidden', false, documentationDiv);
+          } else {
+            self.toggleClass('hidden', false, playgroundDiv);
+            self.toggleClass('hidden', true, documentationDiv);
+          }
+        });
       },
       _computeParamList: function(params) {
         var

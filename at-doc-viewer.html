@@ -94,10 +94,12 @@
         </marked-element>
       </div>
       <div>
-      <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
-        <at-carbon-tab data-name="documentation">Documentation</at-carbon-tab>
-        <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
-      </at-carbon-tabs>
+        <template is="dom-if" if="{{showPlayground}}">
+          <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
+            <at-carbon-tab data-name="documentation">Documentation</at-carbon-tab>
+            <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
+          </at-carbon-tabs>
+        </template>
       </div>
       <div id="documentation" class="documentation">
         <template is="dom-if" if="{{data.properties.length}}">

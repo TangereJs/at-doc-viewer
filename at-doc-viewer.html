@@ -94,12 +94,12 @@
         </marked-element>
       </div>
       <div>
-        <template is="dom-if" if="{{playground}}">
+        <div class="tabSelector hidden">
           <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
             <at-carbon-tab data-name="documentation">Documentation</at-carbon-tab>
             <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
           </at-carbon-tabs>
-        </template>
+        </div>
       </div>
       <div id="documentation" class="documentation">
         <template is="dom-if" if="{{data.properties.length}}">
@@ -223,7 +223,8 @@
         },
         playground: {
           type: Boolean,
-          value: false
+          value: false,
+          observer: 'playgroundChanged'
         }
       },
       _scopeCssViaAttr: true,
@@ -248,6 +249,9 @@
             }
           }
         }
+      },
+      playgroundChanged: function (newValue, oldValue) {
+        var self = this;
         var tabSelector = this.$.tabSelector;
         var documentationDiv = this.$.documentation;
         var playgroundDiv = this.$.playground;

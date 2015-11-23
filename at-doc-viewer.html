@@ -83,6 +83,10 @@
     .playground.hidden {
       display: none;
     }
+
+    .tab-selector.hidden {
+      display: none;
+    }
   </style>
   <template>
     <at-doc-parser id="docParser" url="{{url}}"></at-doc-parser>
@@ -94,7 +98,7 @@
         </marked-element>
       </div>
       <div>
-        <div class="tabSelector hidden">
+        <div id="tabSelectorWrapper" class="tab-selector hidden">
           <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
             <at-carbon-tab data-name="documentation">Documentation</at-carbon-tab>
             <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
@@ -255,6 +259,9 @@
         var tabSelector = this.$.tabSelector;
         var documentationDiv = this.$.documentation;
         var playgroundDiv = this.$.playground;
+        var tabSelectorWrapper = this.$.tabSelectorWrapper;
+        self.toggleClass('hidden', !newValue, tabSelectorWrapper);
+        
         tabSelector.addEventListener('tab-changed', function(event) {
           var value = event.detail.value;
           if (value.currentTab === 'documentation') {

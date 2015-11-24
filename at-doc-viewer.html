@@ -243,25 +243,53 @@
         });
         if (this.auto && this.url === '') {
           // autogenerate the url
-          // debugger;
-          var url = window.location.href;
-          if (url.indexOf("index.html") !== -1) {
-            var urlParts = url.split("/");
-            if (urlParts.length > 2) {
-              var componentName = urlParts[urlParts.length - 2];
-              self.url = componentName + '.html';
+          // #761 at-doc-viewer?element=a-b
+          // code below handles #761
+          var params = window.location.search;
+          if (params) {
+            params = params.substr(1);
+            var paramsParts = params.split('&');
+            var i;
+            var len = paramsParts.length;
+            var paramPart;
+            for (i = 0; i < len; i++) {
+              paramPart = paramsParts[i];
+              if (paramPart.startsWith('element=')) {
+                break;
+              }
+            }
+            if (paramPart.indexOf('=') !== -1) {
+              var namePart = paramPart.split('=')[1];
+              var result = '';
+              if (namePart.indexOf('/') === -1) {
+                result = namePart + '/'+namePart + '.html';
+              } else {
+                result = namePart + '.html';
+              }
+              self.url = '../' + result;
+            }
+            // end of #761 handle
+            // debugger;
+          } else {
+            var url = window.location.href;
+            if (url.indexOf("index.html") !== -1) {
+              var urlParts = url.split("/");
+              if (urlParts.length > 2) {
+                var componentName = urlParts[urlParts.length - 2];
+                self.url = componentName + '.html';
+              }
             }
           }
         }
       },
-      playgroundChanged: function (newValue, oldValue) {
+      playgroundChanged: function(newValue, oldValue) {
         var self = this;
         var tabSelector = this.$.tabSelector;
         var documentationDiv = this.$.documentation;
         var playgroundDiv = this.$.playground;
         var tabSelectorWrapper = this.$.tabSelectorWrapper;
         self.toggleClass('hidden', !newValue, tabSelectorWrapper);
-        
+
         tabSelector.addEventListener('tab-changed', function(event) {
           var value = event.detail.value;
           if (value.currentTab === 'documentation') {

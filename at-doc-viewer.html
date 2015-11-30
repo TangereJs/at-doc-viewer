@@ -298,7 +298,9 @@
           } else {
             self.toggleClass('hidden', false, playgroundDiv);
             self.toggleClass('hidden', true, documentationDiv);
-            self.$.atDocDemo.resetResizeSensor();
+            self.debounce('resetResizeSensor', function (event) {
+              self.$.atDocDemo.resetResizeSensor();
+            }, 100);
           }
         });
       },

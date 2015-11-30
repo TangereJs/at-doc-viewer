@@ -208,7 +208,7 @@
         </template>
       </div>
       <div id="playground" class="playground hidden">
-        <at-doc-demo url={{url}}></at-doc-demo>
+        <at-doc-demo id="atDocDemo" url={{url}}></at-doc-demo>
       </div>
     </div>
   </template>
@@ -298,6 +298,7 @@
           } else {
             self.toggleClass('hidden', false, playgroundDiv);
             self.toggleClass('hidden', true, documentationDiv);
+            self.$.atDocDemo.resetResizeSensor();
           }
         });
       },

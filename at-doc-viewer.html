@@ -123,6 +123,12 @@
                       <p>Default:
                         <span>{{item.default}}</span>
                       </p>
+                      <template is="dom-if" if="{{item.possibleValues}}">
+                        <p>
+                          Possible values:
+                          <span>{{item.possibleValues}}</span>
+                        </p>
+                      </template>
                     </div>
                     <marked-element class="item-description" text="{{item.description}}">
                       <div class="markdown-html"></div>

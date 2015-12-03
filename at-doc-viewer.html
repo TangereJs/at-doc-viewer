@@ -1,7 +1,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../at-core-theme/at-core-theme.html">
 <link rel="import" href="../at-doc-parser/at-doc-parser.html">
-<link rel="import" href="../marked-element/marked-element.html">
+<link rel="import" href="../at-core-markdown/at-core-markdown.html">
 <link rel="import" href="../at-carbon-tabs/at-carbon-tab.html">
 <link rel="import" href="../at-carbon-tabs/at-carbon-tabs.html">
 <link rel="import" href="../at-doc-demo/at-doc-demo.html">
@@ -93,9 +93,9 @@
     <div class="vertical layout doc-container">
       <div class="header">
         <label>{{data.name}}</label>
-        <marked-element text="{{data.description}}">
+        <at-core-markdown text="{{data.description}}">
           <div class="markdown-html"></div>
-        </marked-element>
+        </at-core-markdown>
       </div>
       <div>
         <div id="tabSelectorWrapper" class="tab-selector hidden">
@@ -130,9 +130,9 @@
                         </p>
                       </template>
                     </div>
-                    <marked-element class="item-description" text="{{item.description}}">
+                    <at-core-markdown class="item-description" text="{{item.description}}">
                       <div class="markdown-html"></div>
-                    </marked-element>
+                    </at-core-markdown>
                   </div>
                 </div>
               </template>
@@ -168,9 +168,9 @@
                           <span>{</span>
                           <span class="param-type">{{param.type}}</span>
                           <span>}</span>
-                          <marked-element class="param-description" text="{{param.description}}">
+                          <at-core-markdown class="param-description" text="{{param.description}}">
                             <div class="markdown-html"></div>
-                          </marked-element>
+                          </at-core-markdown>
                         </p>
                       </template>
                       <template is="dom-if" if="{{item.return}}">
@@ -178,13 +178,13 @@
                           <span>Returns {</span>
                           <span class="return-type">{{item.return.type}}</span>
                           <span>}</span>
-                          <marked-element class="return-description">{{item.return.description}}</marked-element>
+                          <at-core-markdown class="return-description">{{item.return.description}}</at-core-markdown>
                         </p>
                       </template>
                     </div>
-                    <marked-element class="item-description" text="{{item.description}}">
+                    <at-core-markdown class="item-description" text="{{item.description}}">
                       <div class="markdown-html"></div>
-                    </marked-element>
+                    </at-core-markdown>
                   </div>
                 </div>
               </template>
@@ -202,9 +202,9 @@
                       <label class="name">{{item.name}}</label>
                     </div>
                     <div class="flex-10 details">
-                      <marked-element class="item-description" text="{{item.description}}">
+                      <at-core-markdown class="item-description" text="{{item.description}}">
                         <div class="markdown-html"></div>
-                      </marked-element>
+                      </at-core-markdown>
                     </div>
                   </div>
                 </div>

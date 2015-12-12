@@ -207,6 +207,23 @@
                       </at-core-markdown>
                     </div>
                   </div>
+                  <template is="dom-if" if="{{item.params}}">
+                    <div class="details">
+                      <template is="dom-repeat" items="{{item.params}}" as="param">
+                        <div class="params-return-wrapper">
+                          <p>
+                            <span class="param-name">{{param.name}}</span>
+                            <span>{</span>
+                            <span class="param-type">{{param.type}}</span>
+                            <span>}</span>
+                          </p>
+                        </div>
+                        <at-core-markdown class="param-description" text="{{param.description}}">
+                          <div class="markdown-html"></div>
+                        </at-core-markdown>
+                      </template>
+                    </div>
+                  </template>
                 </div>
               </template>
             </div>
@@ -268,7 +285,7 @@
               var namePart = paramPart.split('=')[1];
               var result = '';
               if (namePart.indexOf('/') === -1) {
-                result = namePart + '/'+namePart + '.html';
+                result = namePart + '/' + namePart + '.html';
               } else {
                 result = namePart + '.html';
               }
@@ -304,7 +321,7 @@
           } else {
             self.toggleClass('hidden', false, playgroundDiv);
             self.toggleClass('hidden', true, documentationDiv);
-            self.debounce('resetResizeSensor', function (event) {
+            self.debounce('resetResizeSensor', function(event) {
               self.$.atDocDemo.resetResizeSensor();
               self.$.atDocDemo.hide = false;
             }, 100);

@@ -250,11 +250,6 @@
         auto: {
           type: Boolean,
           value: false
-        },
-        playground: {
-          type: Boolean,
-          value: false,
-          observer: 'playgroundChanged'
         }
       },
       _scopeCssViaAttr: true,
@@ -306,6 +301,24 @@
               }
             }
           }
+
+          self.importHref(self.url, function (event) {
+            var importedContent = event.target.import;
+            var domModule = importedContent.querySelector('dom-module');
+            var elementName = domModule.getAttribute('id');
+            this.lastElementName = elementName;
+            var element = document.createElement(elementName);
+            if (element.$meta && element.$meta.length > 0) {
+              var metaEntry = element.$meta[0];
+              var playground = true;
+
+              if (metaEntry.playground !== undefined) {
+                playground = Boolean(metaEntry.playground);
+              }
+
+              self.playgroundChanged(playground);
+            }
+          });
         }
       },
       playgroundChanged: function(newValue, oldValue) {

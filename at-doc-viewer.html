@@ -312,9 +312,10 @@
               if (metaEntry.playground !== undefined) {
                 playground = Boolean(metaEntry.playground);
               }
-
-              self.playgroundChanged(playground);
+            } else {
+              playground = true;
             }
+            self.playgroundChanged(playground);
           });
         }
       },

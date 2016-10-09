@@ -6,95 +6,105 @@
 <link rel="import" href="../at-carbon-tabs/at-carbon-tab.html">
 <link rel="import" href="../at-carbon-tabs/at-carbon-tabs.html">
 <link rel="import" href="../at-doc-demo/at-doc-demo.html">
+<link rel="import" href="../at-theme/at-theme.html">
 
-<dom-module id="at-doc-viewer">
-  <style>
-    .doc-container {
-      margin: 0 auto;
-      padding: 0 32px;
-      max-width: 1400px;
-    }
-
-    .header > label {
-      font-weight: 500;
-      font-size: 21px;
-    }
-
-    .header > p {
-      margin-left: 8px;
-      font-size: 13px;
-    }
-
-    .doc-container > .section {
-      margin-top: 13px;
-      margin-left: 21px;
-      border: 1px solid gray;
-      border-bottom: none;
-    }
-
-    .section > .title {
-      margin-left: 5px;
-      font-weight: 500;
-      font-size: 17px;
-    }
-
-    .items-container > .item-container:first-child {
-      border-top: 1px solid gray;
-      border-bottom: 1px solid gray;
-    }
-
-    .items-container > .item-container {
-      border-bottom: 1px solid gray;
-    }
-
-    .signature .name {
-      font-weight: bold;
-      margin-left: 13px;
-    }
-
-    .item-container > .property.signature {
-      float: left;
-      width: 144px;
-    }
-
-    .item-container.hidden {
-      display: none;
-    }
-
-    .item-container > .property.details {
-      margin-left: 144px;
-      padding: 0;
-    }
-
-    .item-container > .details {
-      padding-left: 144px;
-    }
-
-    .details p {
-      /*remove semantic.css effect*/
-      margin: 0;
-    }
-
-    .details > .params-return-wrapper {
-      background: rgba(0, 0, 0, 0.05)
-    }
-
-    .documentation.hidden {
-      display: none;
-    }
-
-    .playground.hidden {
-      display: none;
-    }
-
-    .tab-selector.hidden {
-      display: none;
-    }
-    .header {
-      text-align: center;
-    }
-  </style>
+<dom-module id="at-doc-viewer"> 
   <template>
+    <style>     
+
+      .doc-container {
+        @apply(--paper-font-body1);
+        margin: 0 auto;
+        padding: 0 32px;
+        max-width: 1400px;        
+      }
+
+      .header > label {
+        font-weight: 500;
+        font-size: 21px;
+      }
+
+      .header > p {
+        margin-left: 8px;
+        font-size: 13px;
+      }
+
+      .doc-container > .section {
+        margin-top: 13px;
+        margin-left: 21px;
+        border: 1px solid gray;
+        border-bottom: none;
+      }
+
+      .section > .title {
+        @apply(--paper-font-headline);
+        margin-bottom: 8px;
+      }
+
+      .items-container > .item-container:first-child {
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+      }
+
+      .items-container > .item-container {
+        border-bottom: 1px solid gray;
+      }
+
+      .signature .name {
+        font-weight: bold;
+        margin-left: 13px;
+      }
+
+      .item-container > .property.signature {
+        float: left;
+        width: 144px;
+      }
+
+      .item-container.hidden {
+        display: none;
+      }
+
+      .item-container > .property.details {
+        margin-left: 144px;
+        padding: 0;
+      }
+
+      .item-container > .details {
+        padding-left: 144px;
+      }
+
+      .details p {
+        /*remove semantic.css effect*/
+        margin: 0;
+      }
+
+      .details > .params-return-wrapper {
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+
+      .documentation {
+        margin: 32px;
+      }
+
+      .documentation.hidden {
+        display: none;
+      }
+
+      .playground.hidden {
+        display: none;
+      }
+
+      .tab-selector.hidden {
+        display: none;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+    </style>
+
     <at-doc-parser id="docParser" url="{{url}}"></at-doc-parser>
     <div class="vertical layout doc-container">
       <div class="header">

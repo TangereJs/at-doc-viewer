@@ -8,15 +8,15 @@
 <link rel="import" href="../at-doc-demo/at-doc-demo.html">
 <link rel="import" href="../at-theme/at-theme.html">
 
-<dom-module id="at-doc-viewer"> 
+<dom-module id="at-doc-viewer">
   <template>
-    <style>     
+    <style>
 
       .doc-container {
         @apply(--paper-font-body1);
         margin: 0 auto;
         padding: 0 32px;
-        max-width: 1400px;        
+        max-width: 1400px;
       }
 
       .header > label {
@@ -265,7 +265,6 @@
           value: false
         }
       },
-      _scopeCssViaAttr: true,
       ready: function() {
         var docParser = this.$.docParser;
         var self = this;
@@ -331,6 +330,17 @@
             self.playgroundChanged(playground);
           });
         }
+
+        this.addEventListener('dom-change', function(event) {
+          self.debounce('debounce dom change', function () {
+            var tabSelector = self.$.tabSelector;
+            var selectedTab = Polymer.dom(tabSelector).querySelector('.iron-selected');
+            if (selectedTab) {
+              tabSelector._tabChanged(selectedTab);
+            }
+            console.log('dom change');
+          }, 50);
+        });
       },
       playgroundChanged: function(newValue, oldValue) {
         var self = this;
@@ -354,6 +364,8 @@
             }, 100);
           }
         });
+
+
       },
       _computeParamList: function(params) {
         var

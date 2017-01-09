@@ -7,6 +7,7 @@
 <link rel="import" href="../at-carbon-tabs/at-carbon-tabs.html">
 <link rel="import" href="../at-doc-demo/at-doc-demo.html">
 <link rel="import" href="../at-theme/at-theme.html">
+<link rel="import" href="../at-core-activity/at-core-activity.html">
 
 <dom-module id="at-doc-viewer">
   <template>
@@ -87,17 +88,28 @@
         margin: 32px;
       }
 
-      .documentation.hidden {
+      .documentation {
         display: none;
       }
 
-      .playground.hidden {
+      .playground {
         display: none;
+      }
+
+      .readme {
+        display: none;
+      }
+
+      .documentation.selected,
+      .playground.selected,
+      .readme.selected {
+        display: block;
       }
 
       .tab-selector.hidden {
         display: none;
       }
+
 
       .header {
         text-align: center;
@@ -116,10 +128,16 @@
       <div>
         <div id="tabSelectorWrapper" class="tab-selector hidden">
           <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
+            <at-carbon-tab data-name="readme" hidden$={{!showReadme}}>Readme</at-carbon-tab>
             <at-carbon-tab data-name="documentation">API Reference</at-carbon-tab>
             <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
           </at-carbon-tabs>
         </div>
+      </div>
+      <div id="readme" class="readme">
+        <at-core-markdown id="markdownReadme">
+          <div class="markdown-html">This is sparta!!!</div>
+        </at-core-markdown>
       </div>
       <div id="documentation" class="documentation">
         <template is="dom-if" if="{{data.properties.length}}">
@@ -246,7 +264,7 @@
           </div>
         </template>
       </div>
-      <div id="playground" class="playground hidden">
+      <div id="playground" class="playground">
         <at-doc-demo id="atDocDemo" url={{url}} hide="true"></at-doc-demo>
       </div>
     </div>
@@ -263,11 +281,24 @@
         auto: {
           type: Boolean,
           value: false
+        },
+
+        /**
+         * showReadme - if true, readme.md file will be read and displayed in a separate tab
+         * @property showReadme
+         * @type Boolean
+         * @default false
+         */
+        showReadme: {
+          type: Boolean,
+          value: false
         }
       },
       ready: function() {
         var docParser = this.$.docParser;
         var self = this;
+        var elementName;
+
         docParser.addEventListener('value-changed', function(event) {
           if (docParser.value.length > 0) {
             var value = docParser.value[0];
@@ -313,23 +344,49 @@
               }
             }
           }
-
-          var elementName = componentName || namePart;
-
-          var alreadyImported = Polymer.telemetry.registrations.find(function (element, index) {
-            return element.is === elementName;
-          });
-
-          if (!alreadyImported) {
-            self.importHref(self.url, function (event) {
-              self._processImportedElement(elementName);
-            }, function(error) {
-              console.log(error);
-            }, true);
-          } else {
-            self._processImportedElement(elementName);
-          }
+          elementName = componentName || namePart;
+        } else if (this.url !== ""){
+          var nameParts = this.url.split("/");
+          elementName = nameParts[nameParts.length-1];
         }
+
+        var alreadyImported = Polymer.telemetry.registrations.find(function (element, index) {
+          return element.is === elementName;
+        });
+
+        if (!alreadyImported) {
+          self.importHref(self.url, function (event) {
+            self._processImportedElement(elementName);
+          }, function(error) {
+            console.log(error);
+          }, true);
+        } else {
+          self._processImportedElement(elementName);
+        }
+
+        var pathParts = window.location.pathname.split("/");
+        pathParts[pathParts.length-1] = "README.md";
+        var path = pathParts.join("/");
+        var readmeDownloadUrl = [window.location.origin, path].join("");
+
+        if (this.url !== "") {
+          var urlParts = this.url.split("/");
+          urlParts[urlParts.length-1] = "README.md";
+          var readmeDownloadUrl = urlParts.join("/");
+        }
+
+        var markdownReadme = self.$.markdownReadme;
+        var readmeDownloadLink = document.createElement('at-core-activity');
+        readmeDownloadLink.handleAs="text";
+        readmeDownloadLink.addEventListener('response', function(event) {
+          var value = event.detail;
+          markdownReadme.text = value;
+        });
+        readmeDownloadLink.addEventListener('error', function(event) {
+          console.log(event.detail);
+        });
+        readmeDownloadLink.url = readmeDownloadUrl;
+        readmeDownloadLink.generateRequest();
 
         this.addEventListener('dom-change', function(event) {
           self.debounce('debounce dom change', function () {
@@ -361,27 +418,30 @@
       playgroundChanged: function(newValue, oldValue) {
         var self = this;
         var tabSelector = this.$.tabSelector;
+        var readmeDiv = this.$.readme;
         var documentationDiv = this.$.documentation;
         var playgroundDiv = this.$.playground;
         var tabSelectorWrapper = this.$.tabSelectorWrapper;
+
+        function handleTabChanged(tabName) {
+          self.toggleClass('selected', tabName === 'playground', playgroundDiv);
+          self.toggleClass('selected', tabName === 'documentation', documentationDiv);
+          self.toggleClass('selected', tabName === 'readme', readmeDiv);
+
+          self.debounce('resetResizeSensor', function(event) {
+            self.$.atDocDemo.resetResizeSensor();
+            self.$.atDocDemo.hide = false;
+          }, 100);
+        }
+
         self.toggleClass('hidden', !newValue, tabSelectorWrapper);
 
         tabSelector.addEventListener('tab-changed', function(event) {
           var value = event.detail.value;
-          if (value.currentTab === 'documentation') {
-            self.toggleClass('hidden', true, playgroundDiv);
-            self.toggleClass('hidden', false, documentationDiv);
-          } else {
-            self.toggleClass('hidden', false, playgroundDiv);
-            self.toggleClass('hidden', true, documentationDiv);
-            self.debounce('resetResizeSensor', function(event) {
-              self.$.atDocDemo.resetResizeSensor();
-              self.$.atDocDemo.hide = false;
-            }, 100);
-          }
+          handleTabChanged(value.currentTab);
         });
 
-
+        handleTabChanged(tabSelector.selected);
       },
       _computeParamList: function(params) {
         var

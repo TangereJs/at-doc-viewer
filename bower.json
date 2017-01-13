@@ -3,13 +3,13 @@
   "private": true,
   "version": "1.0.0.10",
   "dependencies": {
-    "tangere": "TangereJs/tangere#0.8-preview",
+    "tangere": "TangereJs/tangere#master",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#master",
-    "at-theme": "TangereJs/at-theme#0.8-preview",
-    "at-doc-parser": "TangereJs/at-doc-parser#0.8-preview",
-    "at-core-markdown": "TangereJs/at-core-markdown#0.8-preview",
-    "at-carbon-tabs": "TangereJs/at-carbon-tabs#0.8-preview",
-    "at-doc-demo": "TangereJs/at-doc-demo#0.8-preview",
-    "at-core-activity": "TangereJs/at-core-activity#0.8-preview"
+    "at-theme": "TangereJs/at-theme#master",
+    "at-doc-parser": "TangereJs/at-doc-parser#master",
+    "at-core-markdown": "TangereJs/at-core-markdown#master",
+    "at-carbon-tabs": "TangereJs/at-carbon-tabs#master",
+    "at-doc-demo": "TangereJs/at-doc-demo#master",
+    "at-core-activity": "TangereJs/at-core-activity#master"
   }
 }

@@ -15,7 +15,6 @@
       .doc-container {
         @apply(--paper-font-body1);
         margin: 0 auto;
-        padding: 0 32px;
         max-width: 1400px;
       }
 
@@ -423,14 +422,18 @@
         var tabSelectorWrapper = this.$.tabSelectorWrapper;
 
         function handleTabChanged(tabName) {
-          self.toggleClass('selected', tabName === 'playground', playgroundDiv);
-          self.toggleClass('selected', tabName === 'documentation', documentationDiv);
-          self.toggleClass('selected', tabName === 'readme', readmeDiv);
+          updateDivClasses(tabName);
 
           self.debounce('resetResizeSensor', function(event) {
             self.$.atDocDemo.resetResizeSensor();
-            self.$.atDocDemo.hide = false;
+            self.$.atDocDemo.hide = tabName !== 'playground';
           }, 100);
+        }
+
+        function updateDivClasses(tabName) {
+          self.toggleClass('selected', tabName === 'playground', playgroundDiv);
+          self.toggleClass('selected', tabName === 'documentation', documentationDiv);
+          self.toggleClass('selected', tabName === 'readme', readmeDiv);
         }
 
         self.toggleClass('hidden', !newValue, tabSelectorWrapper);
@@ -440,7 +443,7 @@
           handleTabChanged(value.currentTab);
         });
 
-        handleTabChanged(tabSelector.selected);
+        updateDivClasses(tabSelector.selected);
       },
       _computeParamList: function(params) {
         var

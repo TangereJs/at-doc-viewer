@@ -125,8 +125,8 @@
       </div>
       <div>
         <div id="tabSelectorWrapper" class="tab-selector hidden">
-          <at-carbon-tabs id="tabSelector" selected="documentation" attr-for-selected="data-name">
-            <at-carbon-tab data-name="readme" hidden$={{!readme}}>Readme</at-carbon-tab>
+          <at-carbon-tabs id="tabSelector" selected="{{_computeSelected(readme)}}" attr-for-selected="data-name">
+            <at-carbon-tab data-name="readme" hidden$={{!readme}}>Overview</at-carbon-tab>
             <at-carbon-tab data-name="documentation">API Reference</at-carbon-tab>
             <at-carbon-tab data-name="playground">Playground</at-carbon-tab>
           </at-carbon-tabs>
@@ -445,6 +445,7 @@
 
         updateDivClasses(tabSelector.selected);
       },
+
       _computeParamList: function(params) {
         var
           result = [];
@@ -453,6 +454,13 @@
         });
         result = result.join(", ");
         return result;
+      },
+
+      // the most left tab should be selected by default
+      // _computeSelected returns readme if readme is set to true because readme is the most left tab
+      // if readme is set to false documentation is the most left tab
+      _computeSelected: function (readme) {
+        return readme ? "readme" : "documentation";
       }
     });
   </script>

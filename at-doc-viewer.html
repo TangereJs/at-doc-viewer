@@ -351,15 +351,17 @@
         var alreadyImported = Polymer.telemetry.registrations.find(function (element, index) {
           return element.is === elementName;
         });
-
         if (!alreadyImported) {
           self.importHref(self.url, function (event) {
-            self._processImportedElement(elementName);
+            var registration = Polymer.telemetry.registrations.find(function (element, index) {
+              return element.is === elementName;
+            });
+            self._processImportedElement(registration);
           }, function(error) {
             console.log(error);
           }, true);
         } else {
-          self._processImportedElement(elementName);
+          self._processImportedElement(alreadyImported);
         }
 
         var pathParts = window.location.pathname.split("/");
@@ -398,18 +400,16 @@
         });
       },
 
-      _processImportedElement: function (elementName) {
-        var element = document.createElement(elementName);
-        if (element.$meta && element.$meta.length > 0) {
-          var metaEntry = element.$meta[0];
-          var playground = true;
+      _processImportedElement: function (registration) {
+        var playground = true;
+        if (registration.$meta && registration.$meta.length > 0) {
+          var metaEntry = registration.$meta[0];
 
           if (metaEntry.playground !== undefined) {
             playground = Boolean(metaEntry.playground);
           }
-        } else {
-          playground = true;
         }
+
         this.playgroundChanged(playground);
       },
 
@@ -426,7 +426,7 @@
 
           self.debounce('resetResizeSensor', function(event) {
             self.$.atDocDemo.resetResizeSensor();
-            self.$.atDocDemo.hide = tabName !== 'playground';
+            self.$.atDocDemo.hide = tabName !== 'playground';            
           }, 100);
         }
 

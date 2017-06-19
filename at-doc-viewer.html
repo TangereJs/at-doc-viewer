@@ -405,9 +405,14 @@
         if (registration.$meta && registration.$meta.length > 0) {
           var metaEntry = registration.$meta[0];
 
-          if (metaEntry.playground !== undefined) {
+          if (metaEntry.hasOwnProperty('playground')) {
             playground = Boolean(metaEntry.playground);
           }
+        }
+
+        if (!playground) {
+          var playgroundTab = this.$.tabSelector.querySelector('[data-name=playground]');
+          playgroundTab.setAttribute('hidden', true);
         }
 
         this.playgroundChanged(playground);
@@ -436,7 +441,7 @@
           self.toggleClass('selected', tabName === 'readme', readmeDiv);
         }
 
-        self.toggleClass('hidden', !newValue, tabSelectorWrapper);
+        self.toggleClass('hidden', !newValue && !this.readme, tabSelectorWrapper);
 
         tabSelector.addEventListener('tab-changed', function(event) {
           var value = event.detail.value;

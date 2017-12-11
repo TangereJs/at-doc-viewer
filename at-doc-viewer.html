@@ -119,9 +119,7 @@
     <div class="vertical layout doc-container">
       <div class="header">
         <label>{{data.name}}</label>
-        <at-core-markdown text="{{data.description}}">
-          <div class="markdown-html"></div>
-        </at-core-markdown>
+        <at-core-markdown text="{{data.description}}" style="text-align: left"></at-core-markdown>
       </div>
       <div>
         <div id="tabSelectorWrapper" class="tab-selector hidden">
@@ -348,12 +346,12 @@
           elementName = nameParts[nameParts.length-1];
         }
 
-        var alreadyImported = Polymer.telemetry.registrations.find(function (element, index) {
+        var alreadyImported = this._arrayFind(Polymer.telemetry.registrations, function (element, index) {
           return element.is === elementName;
         });
         if (!alreadyImported) {
           self.importHref(self.url, function (event) {
-            var registration = Polymer.telemetry.registrations.find(function (element, index) {
+            var registration = this._arrayFind(Polymer.telemetry.registrations, function (element, index) {
               return element.is === elementName;
             });
             self._processImportedElement(registration);
@@ -398,6 +396,13 @@
             console.log('dom change');
           }, 50);
         });
+      },
+
+      _arrayFind: function(array, cmpFn) {
+        for (var i = 0; i < array.length; i++) {
+          var current = array[i];
+          if (cmpFn.call(this, current, i)) return current;
+        }
       },
 
       _processImportedElement: function (registration) {

@@ -1,6 +1,5 @@
 <link rel="import" href="../tangere/tangere.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../at-theme/at-theme.html">
+<link rel="import" href="../at-core-style-classes/at-core-style-classes.html" />
 <link rel="import" href="../at-doc-parser/at-doc-parser.html">
 <link rel="import" href="../at-core-markdown/at-core-markdown.html">
 <link rel="import" href="../at-carbon-tabs/at-carbon-tab.html">
@@ -10,7 +9,7 @@
 
 <dom-module id="at-doc-viewer">
   <template>
-    <style>
+    <style include="at-core-style-classes">
 
       .doc-container {
         @apply(--paper-font-body1);
@@ -116,7 +115,7 @@
     </style>
 
     <at-doc-parser id="docParser" url="{{url}}"></at-doc-parser>
-    <div class="vertical layout doc-container">
+    <div class="layout-vertical doc-container">
       <div class="header">
         <label>{{data.name}}</label>
         <at-core-markdown text="{{data.description}}" style="text-align: left"></at-core-markdown>
@@ -137,15 +136,15 @@
       </div>
       <div id="documentation" class="documentation">
         <template is="dom-if" if="{{data.properties.length}}">
-          <div class="vertical layout section">
+          <div class="layout-vertical section">
             <label class="title">Properties</label>
-            <div class="vertical layout items-container">
+            <div class="layout-vertical items-container">
               <template is="dom-repeat" items="{{data.properties}}">
                 <div class="item-container" hidden$="[[item.private]]">
-                  <div class="horizontal layout property signature">
+                  <div class="layout-horizontal property signature">
                     <span class="name">{{item.name}}</span>
                   </div>
-                  <div class="vertical layout property details">
+                  <div class="layout-vertical property details">
                     <div class="params-return-wrapper">
                       <p>Type:
                         <span class="param-type">{{item.type}}</span>
@@ -170,12 +169,12 @@
           </div>
         </template>
         <template is="dom-if" if="{{data.methods.length}}">
-          <div class="vertical layout section">
+          <div class="layout-vertical section">
             <label class="title">Methods</label>
-            <div class="vertical layout items-container">
+            <div class="layout-vertical items-container">
               <template is="dom-repeat" items="{{data.methods}}">
                 <div class="item-container" hidden$="[[item.private]]">
-                  <div class="horizontal layout signature">
+                  <div class="layout-horizontal signature">
                     <p>
                       <span class="name">{{item.name}}</span>
                       <span>(</span>
@@ -190,7 +189,7 @@
                       </template>
                     </p>
                   </div>
-                  <div class="vertical layout details">
+                  <div class="layout-vertical details">
                     <div class="params-return-wrapper">
                       <template is="dom-repeat" items="{{item.params}}" as="param">
                         <p>
@@ -222,16 +221,16 @@
           </div>
         </template>
         <template is="dom-if" if="{{data.events.length}}">
-          <div class="vertical layout section">
+          <div class="layout-vertical section">
             <label class="title">Events</label>
-            <div class="vertical layout items-container">
+            <div class="layout-vertical items-container">
               <template is="dom-repeat" items="{{data.events}}">
-                <div class="vertical layout item-container">
-                  <div class="horizontal layout item">
-                    <div class="flex-2 signature">
+                <div class="layout-vertical item-container">
+                  <div class="layout-horizontal item">
+                    <div class="layout-flex-2 signature">
                       <label class="name">{{item.name}}</label>
                     </div>
-                    <div class="flex-10 details">
+                    <div class="layout-flex-10 details">
                       <at-core-markdown class="item-description" text="{{item.description}}">
                         <div class="markdown-html"></div>
                       </at-core-markdown>
@@ -436,7 +435,7 @@
 
           self.debounce('resetResizeSensor', function(event) {
             self.$.atDocDemo.resetResizeSensor();
-            self.$.atDocDemo.hide = tabName !== 'playground';            
+            self.$.atDocDemo.hide = tabName !== 'playground';
           }, 100);
         }
 
